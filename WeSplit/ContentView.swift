@@ -16,14 +16,16 @@ struct ContentView: View {
     
     let tipPercentages = [10, 15, 20, 25, 0]
     
-    var totalPerPerson: Double {
-        let peopleCount = Double(numberOfPeople + 2)
+    var total: Double {
         let tipSelection = Double(tipPercentage)
         
         let tipValue = checkAmount * tipSelection / 100
-        let grandTotal = checkAmount + tipValue
-        
-        return grandTotal / peopleCount
+        return checkAmount + tipValue
+    }
+    
+    var totalPerPerson: Double {
+        let peopleCount = Double(numberOfPeople + 2)
+        return total / peopleCount
     }
     
     var body: some View {
@@ -46,6 +48,13 @@ struct ContentView: View {
                         }
                     }
                     .pickerStyle(.segmented)
+                    
+                    Picker("Tips in another screen", selection: $tipPercentage) {
+                        ForEach(0..<101, id: \.self) {
+                            Text($0, format: .percent)
+                        }
+                    }
+                    .pickerStyle(.navigationLink)
                 }
                 
                 Section {
@@ -57,8 +66,12 @@ struct ContentView: View {
                     .pickerStyle(.menu) // for .navigationLink style should be included to the NavigationStack
                 }
                 
-                Section {
+                Section("Amount per person") {
                     Text(totalPerPerson, format: .currency(code: Locale.current.currency?.identifier ?? "EUR"))
+                }
+                
+                Section("Total") {
+                    Text(total, format: .currency(code: Locale.current.currency?.identifier ?? "EUR"))
                 }
             }
             .navigationTitle("WeSplit")
