@@ -72,6 +72,7 @@ struct ContentView: View {
                 
                 Section("Total") {
                     Text(total, format: .currency(code: Locale.current.currency?.identifier ?? "EUR"))
+                        .foregroundStyle(tipPercentage == 0 ? .red : .green) // conditional modifier
                 }
             }
             .navigationTitle("WeSplit")
